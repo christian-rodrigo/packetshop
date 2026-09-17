@@ -5,6 +5,7 @@ import com.christianrodrigo.packetshop.customer.CustomerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -95,4 +96,13 @@ public class PickupService {
         return pickupGroup;
     }
 
+    public List<PickupGroup> getOpenPickupGroups(){
+
+        return pickupGroupRepository.findByStatus(PickupStatus.OPEN);
+    }
+
+    public PickupGroup getPickupGroupById(Long id) {
+        return pickupGroupRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Pickup Group not found"));
+    }
 }
