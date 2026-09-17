@@ -105,4 +105,11 @@ public class PickupService {
         return pickupGroupRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("Pickup Group not found"));
     }
+
+    public List<PickupEvent> getEventsForPickupGroup(Long pickupGroupid){
+        PickupGroup pickupGroup = pickupGroupRepository.findById(pickupGroupid)
+                .orElseThrow(()-> new RuntimeException("Pickup Group not found"));
+
+        return pickupEventRepository.findByPickupGroupOrderByIdAsc(pickupGroup);
+    }
 }

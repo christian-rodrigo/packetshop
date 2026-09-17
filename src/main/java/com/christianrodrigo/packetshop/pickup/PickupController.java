@@ -18,36 +18,50 @@ public class PickupController {
     public List<PickupResponse> getOpenPickupGroups(){
         return pickupService.getOpenPickupGroups()
                 .stream()
-                .map(this::toResponse)
+                .map(this::toPickupResponse)
                 .toList();
     }
 
     @PostMapping("/pickups/register")
     public PickupResponse registerIncomingPackets(@RequestBody RegisterPickupRequest request){
-        return toResponse(pickupService.registerIncomingPackets(request.customerName(), request.packetCount()));
+        return toPickupResponse(pickupService.registerIncomingPackets(request.customerName(), request.packetCount()));
     }
 
     @PostMapping("/pickups/{id}/collect")
     public PickupResponse collectPackets(@PathVariable Long id, @RequestBody PacketCountRequest request){
-        return toResponse(pickupService.collectPackets(id, request.packetCount()));
+        return toPickupResponse(pickupService.collectPackets(id, request.packetCount()));
     }
 
     @PostMapping("/pickups/{id}/send-back")
     public PickupResponse sendBackPackets(@PathVariable Long id, @RequestBody PacketCountRequest request){
-        return toResponse(pickupService.sendBackPackets(id, request.packetCount()));
+        return toPickupResponse(pickupService.sendBackPackets(id, request.packetCount()));
     }
 
 
-    @GetMapping("/pickup/{id}")
+    @GetMapping("/pickups/{id}")
     public PickupResponse getPickupGroupbyId(@PathVariable Long id){
-        return toResponse(pickupService.getPickupGroupById(id));
+        return toPickupResponse(pickupService.getPickupGroupById(id));
+    }
+
+    @GetMapping("pickups/{id}/events")
+    public List<PickupEventResponse> getPickupEvents(@PathVariable Long id){
+        return pickupService.getEventsForPickupGroup(id)
+                .stream()
+                .map(this::toEventResponse)
+                .toList();
+    }
+
+    private PickupEventResponse toEventResponse(PickupEvent event){
+        return new PickupEventResponse(
+                event.getId(),
+                event.getEventType(),
+                event.getPacketCount(),
+                event.getCreatedAt()
+        );
     }
 
 
-
-
-
-    private PickupResponse toResponse(PickupGroup pickupGroup){
+    private PickupResponse toPickupResponse(PickupGroup pickupGroup){
         return new PickupResponse(
                 pickupGroup.getId(),
                 pickupGroup.getPickupNumber(),
