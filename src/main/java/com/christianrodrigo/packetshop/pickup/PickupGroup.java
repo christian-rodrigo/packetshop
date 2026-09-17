@@ -84,24 +84,30 @@ public class PickupGroup {
     }
 
     public void sendBackPackets(int packetCount) {
-        if (packetCount <= 0) {
-            throw new IllegalArgumentException("Packet count must be greater than 0");
+
+        if(packetCount<=0){
+            throw new IllegalArgumentException("Packet Count must be greater than 0");
         }
 
-        if (status != PickupStatus.OPEN) {
+        if(packetCount>remainingPacketCount){
+            throw new IllegalArgumentException("Cannot Send Back more Packets than remaining");
+        }
+
+        if(this.status != PickupStatus.OPEN){
             throw new IllegalStateException("Cannot send back packets from a closed pickup group");
-        }
-
-        if (packetCount > remainingPacketCount) {
-            throw new IllegalArgumentException("Cannot send back more packets than remaining");
         }
 
         this.remainingPacketCount -= packetCount;
 
-        if (this.remainingPacketCount == 0) {
+        if(remainingPacketCount==0){
             this.status = PickupStatus.CLOSED;
             this.closedAt = LocalDateTime.now();
         }
+
+
+
+
+
     }
 
     public Long getId() {
