@@ -10,4 +10,5 @@ public interface PickupGroupRepository extends JpaRepository<PickupGroup, Long> 
 
     Optional<PickupGroup> findByCustomerAndStatus(Customer customer, PickupStatus status);
     List<PickupGroup> findByStatus(PickupStatus status);
+    List<PickupGroup> findByStatusOrderByPickupNumberAsc(PickupStatus status);
 }

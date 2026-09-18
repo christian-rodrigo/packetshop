@@ -98,7 +98,7 @@ public class PickupService {
 
     public List<PickupGroup> getOpenPickupGroups(){
 
-        return pickupGroupRepository.findByStatus(PickupStatus.OPEN);
+        return pickupGroupRepository.findByStatusOrderByPickupNumberAsc(PickupStatus.OPEN);
     }
 
     public PickupGroup getPickupGroupById(Long id) {
